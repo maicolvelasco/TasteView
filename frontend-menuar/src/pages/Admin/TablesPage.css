@@ -1,0 +1,50 @@
+/* ============================================================
+   TablesPage — estilos específicos (la grilla/tarjeta base viene de
+   components/css/AdminCatalog.css).
+   ============================================================ */
+
+.table-card {
+  position: relative;
+}
+
+.table-card-number {
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.table-card-name {
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+
+.table-card-capacity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  margin-bottom: 12px;
+}
+
+.table-card-status-select {
+  margin-bottom: 12px;
+  font-size: 12.5px;
+  padding: 9px 12px;
+}
+
+.table-card--free {
+  border-left: 4px solid var(--color-success);
+}
+.table-card--occupied {
+  border-left: 4px solid var(--color-error);
+}
+.table-card--reserved {
+  border-left: 4px solid var(--color-warning);
+}
+.table-card--cleaning {
+  border-left: 4px solid var(--color-info);
+}
+
+/* .stat-card-grid y .stat-card viven en components/css/AdminCatalog.css */

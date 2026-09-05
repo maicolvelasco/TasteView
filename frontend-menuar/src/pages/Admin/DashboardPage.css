@@ -1,0 +1,259 @@
+/* ============================================================
+   DashboardPage — estilos específicos.
+   El layout base (admin-page, page-loading, stat-card, etc.) viene de
+   components/css/AdminCatalog.css; summary-card / bar-chart / top-products
+   se reutilizan de ReportsPage.css (mismos componentes: SummaryCard,
+   BarChart, TopProductsList). Aquí solo lo propio del Dashboard.
+   ============================================================ */
+
+/* ── WelcomeBanner ─────────────────────────────────────────── */
+.welcome-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  overflow: hidden;
+  padding: 26px 28px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(120deg, var(--color-primary), var(--color-primary-hover));
+  box-shadow: var(--shadow-md);
+}
+
+.welcome-banner-text {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.welcome-banner-eyebrow {
+  color: var(--color-text-on-primary);
+  opacity: 0.82;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-bottom: 6px;
+}
+
+.welcome-banner-title {
+  color: var(--color-text-on-primary);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.welcome-banner-subtitle {
+  color: var(--color-text-on-primary);
+  opacity: 0.88;
+  font-size: 13px;
+  margin-top: 6px;
+  max-width: 460px;
+}
+
+.welcome-banner-art {
+  position: relative;
+  z-index: 0;
+  flex-shrink: 0;
+  width: 200px;
+  height: 130px;
+  display: none;
+}
+.welcome-banner-art svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 640px) {
+  .welcome-banner-title { font-size: 25px; }
+  .welcome-banner-art { display: block; }
+}
+
+/* ── Grid principal de widgets (gráficos + panel lateral) ──── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 3fr 2fr;
+    align-items: stretch;
+  }
+}
+
+/* ── TableStatusWidget ──────────────────────────────────────── */
+.table-status-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.table-status-ring-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+.table-status-ring {
+  width: 100%;
+  height: 100%;
+}
+
+.table-status-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-status-ring-pct {
+  color: var(--color-text);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.table-status-ring-label {
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  margin-top: 3px;
+}
+
+.table-status-legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.table-status-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.table-status-legend-item--total {
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.table-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.table-status-dot--occupied { background: var(--color-primary); }
+.table-status-dot--free     { background: var(--color-success); }
+
+.table-status-legend-text {
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.table-status-legend-value {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* ── QuickActionsGrid ──────────────────────────────────────── */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 480px) {
+  .quick-actions-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .quick-actions-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 1180px) {
+  .quick-actions-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.quick-action-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.quick-action-card:hover {
+  border-color: var(--color-primary-soft-border);
+  background: var(--color-primary-soft);
+}
+
+.quick-action-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.quick-action-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-action-label {
+  color: var(--color-text);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quick-action-description {
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quick-action-arrow {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: transform 0.15s ease;
+}
+.quick-action-card:hover .quick-action-arrow {
+  transform: translateX(2px);
+  color: var(--color-primary);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .welcome-banner {
+    padding: 20px;
+  }
+  .welcome-banner-title {
+    font-size: 19px;
+  }
+  .table-status-ring-wrap {
+    width: 120px;
+    height: 120px;
+  }
+  .table-status-ring-pct {
+    font-size: 22px;
+  }
+}

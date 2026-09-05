@@ -1,0 +1,257 @@
+/* ============================================================
+   BranchesPage — estilos específicos.
+   El layout base (admin-page, admin-toolbar, admin-action-btn,
+   page-loading, stat-card, etc.) viene de components/css/AdminCatalog.css
+   y components/css/SharedUI.css. Misma paleta corporativa de
+   src/index.css (var(--color-primary), etc.) — 100% responsive.
+   ============================================================ */
+
+/* ── Lista de sucursales ───────────────────────────────────── */
+.branch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Tarjeta de sucursal ───────────────────────────────────── */
+.branch-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+  cursor: default;
+}
+.branch-card:hover {
+  border-color: var(--color-primary-soft-border);
+}
+
+.branch-card--trashed {
+  border-style: dashed;
+  background: var(--color-bg-secondary);
+  opacity: 0.85;
+}
+
+/* ── Columna del avatar ────────────────────────────────────── */
+.branch-card-avatar-col {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.branch-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* Indicador de estado (punto verde/rojo), igual que en Usuarios */
+.branch-status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+}
+.branch-status-dot--active   { background: var(--color-success); }
+.branch-status-dot--inactive { background: var(--color-error); }
+
+/* ── Cuerpo de la tarjeta ──────────────────────────────────── */
+.branch-card-body {
+  flex: 1;
+  min-width: 200px;
+}
+
+.branch-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.branch-card-name {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.branch-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Metadatos (dirección, teléfono, zona horaria, moneda...) ── */
+.branch-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.branch-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+/* ── Chips de estadísticas (usuarios / productos / mesas) ──── */
+.branch-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.branch-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+/* ── Acciones ──────────────────────────────────────────────── */
+.branch-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Ilustración SVG (BranchNetworkIcon) ──────────────────────
+   El pulso emana del local principal para sugerir "red de
+   sucursales en vivo". transform-box: fill-box permite escalar
+   el <circle> desde su propio centro en vez del origen del SVG. */
+.branch-network-icon-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: branchNetworkPulse 2.4s ease-out infinite;
+}
+
+@keyframes branchNetworkPulse {
+  0%   { transform: scale(0.85); opacity: 0.85; }
+  70%  { transform: scale(2.1);  opacity: 0; }
+  100% { transform: scale(2.1);  opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .branch-network-icon-pulse {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+/* ── Formulario de sucursal ────────────────────────────────── */
+.branch-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* El código se normaliza a mayúsculas en el backend; se refleja
+   visualmente para que el campo "se sienta" como un identificador. */
+.branch-form-code-input {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+/* ── Sección avanzada colapsable (config. de recibo) ────────── */
+.branch-form-advanced-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 2px;
+  margin-bottom: 10px;
+  border: none;
+  border-top: 1px dashed var(--color-border);
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+.branch-form-advanced-toggle:hover {
+  color: var(--color-primary);
+}
+
+.branch-form-advanced-chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+.branch-form-advanced-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.branch-form-advanced-panel {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ── Estados inline (papelera: cargando / error) ─────────────
+   Versión compacta de .page-loading/.page-error (que son de
+   página completa) para usar dentro de una pestaña ya cargada. */
+.branches-inline-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  gap: 10px;
+  color: var(--color-text-secondary);
+  grid-column: 1 / -1;
+}
+.branches-inline-state--error {
+  color: var(--color-error);
+}
+.branches-inline-state--error p {
+  font-weight: 600;
+  max-width: 360px;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .branch-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .branch-card-avatar-col {
+    align-self: center;
+  }
+  .branch-card-actions {
+    justify-content: stretch;
+  }
+  .branch-card-actions .admin-action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .branch-meta-item {
+    max-width: 100%;
+  }
+}

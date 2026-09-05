@@ -1,0 +1,180 @@
+:root {
+  /* ============ Colorimetría del menú — Modo Normal ============ */
+  /* Marca / Primario */
+  --color-primary: #E67E22;
+  --color-primary-hover: #D36C1A;
+  --color-primary-active: #B55912;
+  --color-primary-disabled-bg: #E0E0E0;
+  --color-primary-disabled-text: #AFAFAF;
+  --color-primary-soft: rgba(230, 126, 34, 0.10);   /* fondo suave para estados activos/hover, sin saturar */
+  --color-primary-soft-border: rgba(230, 126, 34, 0.35);
+
+  /* Texto */
+  --color-text: #333333;            /* Base Oscura — títulos, precios, texto principal */
+  --color-text-secondary: #70757A;  /* Base Media — texto secundario, iconos inactivos */
+  --color-text-on-primary: #FFFFFF;
+  --color-text-disabled: #AFAFAF;
+
+  /* Fondos y superficies */
+  --color-bg: #FFFFFF;              /* Fondo Claro — general */
+  --color-bg-secondary: #F8F9FA;    /* Fondo Secundario — cabeceras, secciones, evita el blanco puro */
+  --color-surface: #FFFFFF;         /* Tarjetas */
+  --color-border: #E5E7EA;          /* Bordes sutiles (derivado del Fondo Secundario) */
+  --color-border-strong: #D8DBDF;
+
+  /* Semánticos (accesibilidad — no depender solo del color) */
+  --color-success: #27AE60;
+  --color-success-soft: rgba(39, 174, 96, 0.10);
+  --color-warning: #F1C40F;
+  --color-warning-soft: rgba(241, 196, 15, 0.15);
+  --color-error: #E74C3C;
+  --color-error-soft: rgba(231, 76, 60, 0.10);
+  --color-info: #3498DB;            /* Etiquetas especiales: Vegano, Picante, etc. */
+  --color-info-soft: rgba(52, 152, 219, 0.10);
+
+  /* Sombras — sutiles, propias de una interfaz clara (no glow como en dark mode) */
+  --shadow-sm: 0 1px 2px rgba(51, 51, 51, 0.06);
+  --shadow-md: 0 4px 12px rgba(51, 51, 51, 0.08);
+  --shadow-lg: 0 8px 24px rgba(51, 51, 51, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ============ Botones (estados según la colorimetría: normal/hover/pressed/disabled) ============ */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+.btn-primary:active {
+  background: var(--color-primary-active);
+}
+.btn-primary:disabled {
+  background: var(--color-primary-disabled-bg);
+  color: var(--color-primary-disabled-text);
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: var(--color-error);
+  color: var(--color-text-on-primary);
+}
+.btn-danger:hover {
+  filter: brightness(0.92);
+}
+
+.btn-success {
+  background: var(--color-success);
+  color: var(--color-text-on-primary);
+}
+.btn-success:hover {
+  filter: brightness(0.92);
+}
+
+.btn-warning {
+  background: var(--color-warning);
+  color: var(--color-text);
+}
+.btn-warning:hover {
+  filter: brightness(0.95);
+}
+
+/* ============ Tarjetas ============ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============ Inputs ============ */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+.input:disabled {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.input::placeholder {
+  color: var(--color-text-secondary);
+}

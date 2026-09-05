@@ -1,0 +1,300 @@
+/* ============================================================
+   LoginPage — estilos específicos.
+   .form-field / .form-field--center vienen de AdminCatalog.css;
+   .spin-icon de SharedUI.css. Paleta corporativa vía var(--color-*),
+   lista para el futuro selector de colores del administrador.
+   ============================================================ */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--color-bg-secondary);
+}
+
+.login-panel {
+  width: 100%;
+  max-width: 920px;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 860px) {
+  .login-panel {
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+  }
+}
+
+/* ── Panel de marca (izquierda, solo pantallas anchas) ─────── */
+.login-brand-panel {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 48px 44px;
+  background: linear-gradient(150deg, var(--color-primary), var(--color-primary-hover));
+}
+
+@media (min-width: 860px) {
+  .login-brand-panel { display: flex; }
+}
+
+.login-brand-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+.login-brand-content {
+  position: relative;
+  z-index: 1;
+}
+
+.login-brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--color-text-on-primary);
+  margin-bottom: 18px;
+}
+
+.login-brand-title {
+  color: var(--color-text-on-primary);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.login-brand-subtitle {
+  color: var(--color-text-on-primary);
+  opacity: 0.88;
+  font-size: 13.5px;
+  margin-top: 6px;
+  margin-bottom: 30px;
+}
+
+.login-brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+
+.login-brand-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-on-primary);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* ── Panel de formulario (derecha) ──────────────────────────── */
+.login-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+@media (min-width: 480px) {
+  .login-form-panel { padding: 44px 48px; }
+}
+
+/* Marca compacta, solo visible cuando el panel izquierdo está oculto */
+.login-form-mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+@media (min-width: 860px) {
+  .login-form-mobile-brand { display: none; }
+}
+
+.login-form-mobile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: var(--color-text-on-primary);
+  flex-shrink: 0;
+}
+
+.login-form-mobile-name {
+  color: var(--color-text);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.login-form-title {
+  color: var(--color-text);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.login-form-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+  margin-top: 4px;
+  margin-bottom: 22px;
+}
+
+/* ── Selector de modo (Email / PIN) ─────────────────────────── */
+.login-mode-tabs {
+  margin-bottom: 20px;
+}
+.login-mode-tabs .tab-switcher {
+  width: 100%;
+}
+.login-mode-tabs .tab-switcher-tab {
+  flex: 1;
+  text-align: center;
+}
+.login-mode-tabs .tab-switcher-content {
+  justify-content: center;
+}
+
+/* ── Banner de error ─────────────────────────────────────────── */
+.login-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--color-error-soft);
+  color: var(--color-error);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── Formulario ─────────────────────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-pin-input {
+  text-align: center;
+  font-size: 26px;
+  letter-spacing: 10px;
+  font-weight: 700;
+}
+
+/* ── Campo de contraseña con toggle mostrar/ocultar ─────────── */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.password-field-input {
+  padding-left: 40px;
+  padding-right: 42px;
+}
+
+.password-field-toggle {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.password-field-toggle:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+/* ── Botón de envío ─────────────────────────────────────────── */
+.login-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: var(--color-text-on-primary);
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.15s ease;
+}
+.login-submit-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+.login-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ── Enlace al menú público ─────────────────────────────────── */
+.login-footer-link {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  margin-top: 20px;
+}
+.login-footer-link a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.login-footer-link a:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 479px) {
+  .login-form-panel {
+    padding: 32px 22px;
+  }
+  .login-form-title {
+    font-size: 19px;
+  }
+  .login-pin-input {
+    font-size: 22px;
+    letter-spacing: 8px;
+  }
+}

@@ -1,0 +1,407 @@
+/* ============================================================
+   ReportsPage — estilos específicos.
+   El layout base viene de components/css/AdminCatalog.css.
+   ============================================================ */
+
+/* ── Grid de métricas de resumen ───────────────────────────── */
+.reports-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+}
+
+/* ── Tarjeta de métrica (SummaryCard) ──────────────────────── */
+.summary-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.15s ease;
+}
+.summary-card--primary { border-top: 3px solid var(--color-primary); }
+.summary-card--success  { border-top: 3px solid var(--color-success); }
+.summary-card--info     { border-top: 3px solid var(--color-info); }
+.summary-card--warning  { border-top: 3px solid var(--color-warning); }
+.summary-card--error    { border-top: 3px solid var(--color-error); }
+
+.summary-card-icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-card-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.summary-card-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+}
+
+.summary-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.summary-card-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-card-label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.summary-card-trend {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.summary-card-trend--up   { color: var(--color-success); }
+.summary-card-trend--down { color: var(--color-error); }
+
+/* ── Layout principal de gráficos ──────────────────────────── */
+.reports-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  .reports-charts-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* ── Tarjeta de gráfico ────────────────────────────────────── */
+.reports-chart-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.reports-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.reports-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ── PeriodSelector ────────────────────────────────────────── */
+.period-selector {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.period-selector-btn {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 7px 14px;
+  border-radius: calc(var(--radius-sm) - 2px);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.period-selector-pill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  border-radius: calc(var(--radius-sm) - 2px);
+  z-index: 0;
+}
+
+.period-selector-label {
+  position: relative;
+  z-index: 1;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: color 0.15s ease;
+}
+.period-selector-btn.active .period-selector-label {
+  color: var(--color-text-on-primary);
+}
+
+/* ── BarChart ──────────────────────────────────────────────── */
+.bar-chart {
+  display: flex;
+  gap: 8px;
+  height: var(--bar-chart-height, 200px);
+}
+
+.bar-chart-y-axis {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  padding-bottom: 22px; /* espacio para etiquetas X */
+  flex-shrink: 0;
+}
+
+.bar-chart-y-label {
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.bar-chart-area {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1;
+  padding-bottom: 22px; /* espacio para etiquetas X */
+}
+
+.bar-chart-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.bar-chart-col {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.bar-chart-bar-wrap {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 2px;
+}
+
+.bar-chart-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: opacity 0.15s ease;
+}
+
+.bar-chart-x-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+}
+
+.bar-chart-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  white-space: nowrap;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.bar-chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-text);
+}
+
+.bar-chart-tooltip-label {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+.bar-chart-tooltip-value {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bar-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+/* ── TopProductsList ───────────────────────────────────────── */
+.top-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.top-products-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+  cursor: default;
+}
+.top-products-item:last-child {
+  border-bottom: none;
+}
+
+.top-products-rank-wrap {
+  flex-shrink: 0;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-products-rank {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.top-products-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-products-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.top-products-name {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-products-sold {
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.top-products-bar-bg {
+  height: 5px;
+  background: var(--color-bg-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.top-products-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.top-products-revenue {
+  color: var(--color-primary);
+  font-size: 12.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.top-products-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .reports-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .summary-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 14px;
+    gap: 8px;
+  }
+  .summary-card-value {
+    font-size: 18px;
+  }
+  .bar-chart-y-axis {
+    display: none; /* ocultar eje Y en móvil muy pequeño */
+  }
+}

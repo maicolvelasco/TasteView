@@ -1,0 +1,66 @@
+/* ============================================================
+   WaiterPage — Toma de Pedidos (Mesero)
+   Mismo tema corporativo que CashierPage (src/index.css).
+   ============================================================ */
+
+.waiter-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ---------- Lista "Mis Pedidos" ---------- */
+.my-orders-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.my-order-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.my-order-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.my-order-number {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.my-order-date {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.my-order-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.my-order-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  text-transform: capitalize;
+}
+
+.my-order-total {
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 15px;
+}

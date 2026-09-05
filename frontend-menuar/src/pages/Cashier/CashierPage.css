@@ -1,0 +1,414 @@
+/* ============================================================
+   CashierPage — Caja y Facturación
+   Sigue la paleta corporativa definida en src/index.css
+   (--color-primary, --color-success, etc.) para que un futuro
+   cambio de tema desde Admin se refleje aquí sin tocar este archivo.
+   100% responsive: 1 columna en móvil, 2 columnas desde tablet grande.
+   ============================================================ */
+
+.cashier-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ---------- Tarjetas de estadísticas ---------- */
+.cashier-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .cashier-stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.cashier-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+  min-width: 0;
+}
+.cashier-stat:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cashier-stat-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cashier-stat-text { min-width: 0; }
+
+.cashier-stat-value {
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cashier-stat-label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cashier-stat--primary .cashier-stat-icon { background: var(--color-primary-soft); color: var(--color-primary); }
+.cashier-stat--warning .cashier-stat-icon { background: var(--color-warning-soft); color: #B7891A; }
+.cashier-stat--info .cashier-stat-icon    { background: var(--color-info-soft); color: var(--color-info); }
+.cashier-stat--success .cashier-stat-icon { background: var(--color-success-soft); color: var(--color-success); }
+
+/* ---------- Paneles / tarjetas base ---------- */
+.cashier-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cashier-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* ---------- Grilla principal: lista de pedidos + panel de factura ---------- */
+.cashier-orders-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .cashier-orders-grid {
+    grid-template-columns: 1fr 380px;
+  }
+  .cashier-invoice-panel {
+    position: sticky;
+    top: 84px;
+  }
+}
+
+.cashier-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- Tarjeta de pedido ---------- */
+.cashier-order-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: var(--color-bg-secondary);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.cashier-order-card:hover {
+  border-color: var(--color-primary-soft-border);
+}
+.cashier-order-card.selected {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.cashier-order-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cashier-order-number {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.cashier-order-total {
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.cashier-order-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.cashier-order-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  text-transform: capitalize;
+}
+
+.cashier-order-waiter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+/* ---------- Panel de factura ---------- */
+.cashier-invoice-order-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.cashier-invoice-order-meta {
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+}
+
+.cashier-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.cashier-form-field label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---------- Selector de método de pago ---------- */
+.cashier-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.cashier-payment-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cashier-payment-option:hover {
+  border-color: var(--color-primary-soft-border);
+  color: var(--color-text);
+}
+.cashier-payment-option.active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ---------- Checkbox de IVA ---------- */
+.cashier-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.cashier-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* ---------- Resumen de totales ---------- */
+.cashier-invoice-totals {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.cashier-invoice-totals-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+  padding: 4px 0;
+}
+
+.cashier-invoice-totals-total {
+  border-top: 1px solid var(--color-border-strong);
+  margin-top: 6px;
+  padding-top: 10px;
+  font-weight: 700;
+  color: var(--color-text);
+  font-size: 15px;
+}
+.cashier-invoice-totals-total span:last-child {
+  color: var(--color-primary);
+}
+
+/* ---------- Botón de cobro ---------- */
+.cashier-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-success), #1F8F52);
+  color: var(--color-text-on-primary);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+.cashier-submit-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
+}
+.cashier-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ---------- Historial de facturas ---------- */
+.cashier-invoice-history {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.cashier-invoice-history-item {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.cashier-invoice-history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cashier-invoice-number {
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.cashier-invoice-total {
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.cashier-invoice-history-meta {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.cashier-reprint-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-primary-soft-border);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- Carga / error ---------- */
+.cashier-loading,
+.cashier-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  gap: 12px;
+  color: var(--color-text-secondary);
+}
+
+.cashier-loading-spinner {
+  color: var(--color-primary);
+  animation: spin 0.9s linear infinite;
+}
+
+.cashier-error p {
+  color: var(--color-error);
+  font-weight: 600;
+  max-width: 360px;
+}
+
+.cashier-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.cashier-retry-btn:hover {
+  background: var(--color-primary-hover);
+}

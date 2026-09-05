@@ -1,0 +1,346 @@
+/* ============================================================
+   AdminCatalog — estilos compartidos por las pantallas de administración
+   del menú (Gestionar Menú, Categorías, Modificadores). Misma paleta
+   corporativa de src/index.css. 100% responsive.
+   ============================================================ */
+
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ---------- Barra de herramientas (buscador + botón nuevo) ---------- */
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-toolbar-search {
+  flex: 1;
+  min-width: 220px;
+  max-width: 380px;
+}
+
+.admin-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: var(--color-text-on-primary);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-new-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+/* Variante secundaria: para una acción del toolbar que no es "crear"
+   (ej. "Duplicar de otra sucursal"), sin competir visualmente con el
+   botón principal de la pantalla. */
+.admin-new-btn--secondary {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  box-shadow: none;
+}
+.admin-new-btn--secondary:hover {
+  border-color: var(--color-primary-soft-border);
+  color: var(--color-primary);
+  filter: none;
+  box-shadow: none;
+}
+.admin-new-btn--secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Texto de ayuda / enlaces cruzados ---------- */
+.admin-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  max-width: 760px;
+}
+
+.admin-hint-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.admin-drag-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+/* ---------- Grilla de tarjetas ---------- */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+/* ---------- Tarjeta base ---------- */
+.admin-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.admin-card--draggable {
+  cursor: grab;
+}
+.admin-card--draggable:active {
+  cursor: grabbing;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.admin-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+/* ---------- Botones de acción pequeños (editar/eliminar/duplicar/etc.) ---------- */
+.admin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.admin-action-btn:hover {
+  filter: brightness(0.97);
+}
+
+.admin-action-btn--edit {
+  background: var(--color-info-soft);
+  color: var(--color-info);
+}
+.admin-action-btn--delete {
+  background: var(--color-error-soft);
+  color: var(--color-error);
+}
+.admin-action-btn--duplicate {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+.admin-action-btn--on {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+.admin-action-btn--off {
+  background: var(--color-error-soft);
+  color: var(--color-error);
+}
+.admin-action-btn--icon-only {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  justify-content: center;
+}
+
+/* ---------- Estados de carga / error de página completa ---------- */
+.page-loading,
+.page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  gap: 12px;
+  color: var(--color-text-secondary);
+}
+
+.page-loading-spinner {
+  color: var(--color-primary);
+  animation: spin 0.9s linear infinite;
+}
+
+.page-error p {
+  color: var(--color-error);
+  font-weight: 600;
+  max-width: 360px;
+}
+
+.page-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+.page-retry-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ---------- Campos de formulario reutilizados dentro de FormModal ---------- */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.form-field label {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.form-field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+.form-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.form-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-success), #1F8F52);
+  color: var(--color-text-on-primary);
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: filter 0.15s ease;
+}
+.form-submit-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+.form-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── Stat card grid (compartido: TablesPage, ReservationsPage, UsersPage) ── */
+.stat-card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 170px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  cursor: default;
+}
+
+.stat-card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.stat-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-card-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-card-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* Tonos de stat-card */
+.stat-card--primary .stat-card-icon  { background: var(--color-primary-soft); color: var(--color-primary); }
+.stat-card--success .stat-card-icon  { background: var(--color-success-soft); color: var(--color-success); }
+.stat-card--error   .stat-card-icon  { background: var(--color-error-soft);   color: var(--color-error); }
+.stat-card--info    .stat-card-icon  { background: var(--color-info-soft);     color: var(--color-info); }
+.stat-card--warning .stat-card-icon  { background: var(--color-warning-soft);  color: var(--color-warning); }
+.stat-card--primary .stat-card-value { color: var(--color-primary); }
+.stat-card--success .stat-card-value { color: var(--color-success); }
+.stat-card--error   .stat-card-value { color: var(--color-error); }
+.stat-card--info    .stat-card-value { color: var(--color-info); }
+.stat-card--warning .stat-card-value { color: var(--color-warning); }

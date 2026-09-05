@@ -1,0 +1,76 @@
+/* ============================================================
+   CategoriesPage — estilos específicos (la grilla/tarjeta base viene de
+   components/css/AdminCatalog.css).
+   ============================================================ */
+
+.category-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.category-drag-handle {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.category-card-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.category-card-info {
+  min-width: 0;
+}
+
+.category-card-name {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-card-count {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.category-card-description {
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  margin-bottom: 6px;
+}
+
+/* ---------- Selector de emoji ---------- */
+.category-emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.category-emoji-option {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-bg);
+  cursor: pointer;
+}
+.category-emoji-option.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+input.category-emoji-custom {
+  width: 60px;
+  text-align: center;
+  padding: 8px;
+}

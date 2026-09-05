@@ -1,0 +1,161 @@
+/* ============================================================
+   UsersPage — estilos específicos.
+   El layout base (admin-page, admin-toolbar, admin-action-btn,
+   page-loading, etc.) viene de components/css/AdminCatalog.css.
+   ============================================================ */
+
+/* ── Lista de usuarios ─────────────────────────────────────── */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Tarjeta de usuario ────────────────────────────────────── */
+.user-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease;
+  cursor: default;
+}
+.user-card:hover {
+  border-color: var(--color-primary-soft-border);
+}
+
+/* ── Columna del avatar ────────────────────────────────────── */
+.user-card-avatar-col {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* Indicador de estado (punto verde/rojo) */
+.user-status-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+}
+.user-status-dot--active   { background: var(--color-success); }
+.user-status-dot--inactive { background: var(--color-error); }
+
+/* ── Cuerpo de la tarjeta ──────────────────────────────────── */
+.user-card-body {
+  flex: 1;
+  min-width: 180px;
+}
+
+.user-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.user-card-name {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.user-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Metadatos (email, sucursal, teléfono) ─────────────────── */
+.user-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.user-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+/* ── Acciones ──────────────────────────────────────────────── */
+.user-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Formulario de usuario ─────────────────────────────────── */
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-field-optional {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.form-field--center {
+  justify-content: center;
+}
+
+/* ── Badge neutral (tono extra no definido en SharedUI) ───── */
+.status-badge--neutral {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .user-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .user-card-avatar-col {
+    align-self: center;
+  }
+  .user-card-actions {
+    justify-content: stretch;
+  }
+  .user-card-actions .admin-action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .user-meta-item {
+    max-width: 100%;
+  }
+}
