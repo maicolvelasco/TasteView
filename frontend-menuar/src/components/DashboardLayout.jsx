@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNavItems } from '../hooks/useNavItems';
 import { useDisclosure } from '../hooks/useDisclosure';
+import useFavicon from '../hooks/useFavicon';
+import useAppliedTheme from '../hooks/useAppliedTheme';
 import MobileHeader from './layout/MobileHeader';
 import MobileDrawer from './layout/MobileDrawer';
 import TopBar from './layout/TopBar';
@@ -18,6 +20,12 @@ const DashboardLayout = ({ children }) => {
   const location = useLocation();
   const navItems = useNavItems();
   const drawer = useDisclosure(false);
+
+  // Ícono de la pestaña del navegador = logo del negocio (Ajustes > Negocio).
+  useFavicon(user?.company?.logo_url);
+
+  // Colores del sistema = tema del negocio (Ajustes > Negocio > Colores).
+  useAppliedTheme(user?.company?.theme);
 
   const handleNavigate = (path) => {
     navigate(path);

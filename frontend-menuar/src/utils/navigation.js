@@ -15,6 +15,9 @@ export const NAV_ICON = {
   REPORTS: 'barChart',
   USERS: 'users',
   BRANCHES: 'store',
+  SETTINGS: 'settings',
+  USER_PROFILE: 'userProfile',
+  BUSINESS: 'building',
 };
 
 /**
@@ -59,8 +62,30 @@ export function buildNavItems({ isWaiter, isChef, isCashier, isManager, isAdmin 
   }
 
   if (isAdmin) {
-    items.push({ type: 'link', path: '/admin/branches', icon: NAV_ICON.BRANCHES, label: 'Sucursales' });
     items.push({ type: 'link', path: '/admin/users', icon: NAV_ICON.USERS, label: 'Usuarios' });
+  }
+
+  // Ajustes va al final del menú (convención habitual), como submenú
+  // desplegable — igual que "Menú" agrupa Gestionar Menú/Categorías/
+  // Modificadores. "Usuario" (perfil propio) es para Manager+; "Sucursales"
+  // y "Negocio" solo para Admin+ (decisiones a nivel empresa).
+  if (isManager) {
+    const settingsItems = [
+      { path: '/admin/settings/user', icon: NAV_ICON.USER_PROFILE, label: 'Usuario' },
+    ];
+
+    if (isAdmin) {
+      settingsItems.push({ path: '/admin/branches', icon: NAV_ICON.BRANCHES, label: 'Sucursales' });
+      settingsItems.push({ path: '/admin/settings/business', icon: NAV_ICON.BUSINESS, label: 'Negocio' });
+    }
+
+    items.push({
+      type: 'group',
+      key: 'ajustes',
+      icon: NAV_ICON.SETTINGS,
+      label: 'Ajustes',
+      items: settingsItems,
+    });
   }
 
   return items;

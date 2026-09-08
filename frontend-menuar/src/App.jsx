@@ -12,6 +12,8 @@ import CashierPage from './pages/Cashier/CashierPage';
 import AdminDashboard from './pages/Admin/DashboardPage';
 import AdminUsers from './pages/Admin/UsersPage';
 import AdminBranches from './pages/Admin/BranchesPage';
+import SettingsUserPage from './pages/Admin/SettingsUserPage';
+import SettingsBusinessPage from './pages/Admin/SettingsBusinessPage';
 import AdminMenu from './pages/Admin/MenuPage';
 import CategoriesPage from './pages/Admin/CategoriesPage';
 import ModifiersPage from './pages/Admin/ModifiersPage';
@@ -78,6 +80,9 @@ function App() {
               <Route path="/tables" element={<TablesPage />} />
               <Route path="/users" element={<AdminUsers />} />
               <Route path="/branches" element={<AdminBranches />} />
+              <Route path="/settings/user" element={<SettingsUserPage />} />
+              <Route path="/settings/business" element={<SettingsBusinessPage />} />
+              <Route path="/settings" element={<Navigate to="/admin/settings/user" replace />} />
               <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
             </Routes>
           </DashboardLayout>

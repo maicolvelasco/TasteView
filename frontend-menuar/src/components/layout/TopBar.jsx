@@ -4,12 +4,13 @@ import { LogOut } from '../../icons';
 import NavLink from './NavLink';
 import NavGroup from './NavGroup';
 import UserBadge from './UserBadge';
+import BrandLogo from './BrandLogo';
 import { isPathActive, isGroupActive } from '../../utils/navigation';
 
 // Barra horizontal fija arriba, solo visible en PC (ver DashboardLayout.css).
 const TopBar = ({ navItems, pathname, onNavigate, user, onLogout }) => (
   <header className="dash-topbar">
-    <span className="dash-brand" style={{ fontSize: 18 }}>🍽️ Restaurant AR</span>
+    <BrandLogo company={user?.company} size={24} />
 
     <nav className="dash-topnav">
       {navItems.map((item) => (

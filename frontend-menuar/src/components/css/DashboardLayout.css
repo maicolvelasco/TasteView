@@ -53,6 +53,27 @@
   white-space: nowrap;
 }
 
+/* Logo del negocio (Ajustes > Negocio): SIEMPRE se redimensiona a esta
+   caja cuadrada con object-fit: contain, sin importar las proporciones
+   originales del archivo que suba el admin (cuadrado, apaisado, con
+   transparencia, etc.) — nunca se deforma ni se recorta. */
+.dash-brand-logo {
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.dash-brand-emoji {
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.dash-brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
 /* ---------- Cajón lateral (móvil + tablet) ---------- */
 .dash-drawer-backdrop {
   position: fixed;

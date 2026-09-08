@@ -110,11 +110,67 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load('role', 'branch');
+        $user = $request->user()->load('role', 'branch.company');
 
         return response()->json([
             'status' => true,
             'data' => new UserResource($user, includePermissions: true),
+        ]);
+    }
+
+    /**
+     * Actualiza los datos de perfil del propio usuario logueado (nombre,
+     * teléfono). A propósito NO permite tocar email, rol, sucursal ni PIN
+     * desde acá — esos son cambios administrativos y ya los cubre
+     * Admin\UserController; esta ruta es solo "mis propios datos".
+     * PUT /api/me
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:100',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $user = $request->user();
+        $user->update($validated);
+
+        return response()->json([
+            'status' => true,
+            'data' => new UserResource($user->fresh()->load('role', 'branch.company'), includePermissions: true),
+        ]);
+    }
+
+    /**
+     * Cambia la contraseña del propio usuario logueado. Exige la
+     * contraseña actual: sin esto, cualquiera que encuentre una sesión
+     * abierta sin cerrar podría tomar la cuenta con solo poner una
+     * contraseña nueva.
+     * PUT /api/me/password
+     */
+    public function changePassword(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $request->user();
+
+        if (! Hash::check($validated['current_password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => ['La contraseña actual no es correcta.'],
+            ]);
+        }
+
+        // El cast 'hashed' del modelo User hashea esto automáticamente al
+        // guardar (ver User::$casts) — nunca se guarda en texto plano.
+        $user->password = $validated['new_password'];
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Contraseña actualizada correctamente.',
         ]);
     }
 
@@ -146,7 +202,7 @@ class AuthController extends Controller
         $candidates = User::query()
             ->where('is_active', true)
             ->whereNotNull('pin_code')
-            ->with('role', 'branch')
+            ->with('role', 'branch.company')
             ->limit(self::MAX_PIN_CANDIDATES)
             ->get();
 
@@ -167,7 +223,7 @@ class AuthController extends Controller
         $user = User::query()
             ->where('email', $credentials['email'])
             ->where('is_active', true)
-            ->with('role', 'branch')
+            ->with('role', 'branch.company')
             ->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {

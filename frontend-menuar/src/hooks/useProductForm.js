@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const emptyForm = () => ({
   name: '',
@@ -20,8 +21,18 @@ const emptyForm = () => ({
  * Encapsula el estado y el guardado del formulario de crear/editar producto:
  * datos básicos, ítems del combo y opciones/modificadores seleccionados.
  * Si recibe un `product`, precarga sus datos y trae sus opciones asignadas.
+ *
+ * Antes, al CREAR un producto, se mandaba siempre `branch_id: 1` fijo —
+ * el mismo bug que ya se corrigió en Menú/Categorías/Modificadores/Pedidos:
+ * cualquier producto nuevo terminaba en la sucursal 1 sin importar quién
+ * ni desde qué sucursal lo estuviera creando. Ahora usa la sucursal real
+ * de la sesión (en edición no tiene efecto: el backend ignora `branch_id`
+ * al actualizar, un producto no cambia de sucursal desde este formulario).
  */
 export default function useProductForm(product, onSaved) {
+  const { user } = useAuth();
+  const branchId = user?.branch?.id ?? null;
+
   const [form, setForm] = useState(emptyForm());
   const [comboItems, setComboItems] = useState({}); // { [product_id]: quantity }
   const [modifierSelections, setModifierSelections] = useState({}); // { [modifier_id]: {checked,is_required,disabled_option_ids} }
@@ -127,7 +138,7 @@ export default function useProductForm(product, onSaved) {
 
       const payload = {
         ...form,
-        branch_id: 1,
+        branch_id: branchId,
         combo_items: form.is_combo ? combo_items : [],
         modifiers: modifiersPayload,
       };

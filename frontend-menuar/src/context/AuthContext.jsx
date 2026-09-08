@@ -37,6 +37,24 @@ export const AuthProvider = ({ children }) => {
     window.location.href = '/login';
   };
 
+  /**
+   * Actualiza el `user` en memoria con datos parciales (merge superficial),
+   * sin pedirle nada al backend. Se usa después de guardar en Ajustes
+   * (perfil propio, o el negocio/logo) para que el cambio se refleje al
+   * instante en toda la app (topbar, drawer, user badge) sin recargar la
+   * página ni esperar a que vuelva a andar el próximo /me.
+   */
+  const updateUser = (patch) => {
+    setUser((prev) => (prev ? { ...prev, ...patch } : prev));
+  };
+
+  /** Vuelve a pedir /me completo — por si se prefiere la fuente de verdad del servidor. */
+  const refreshUser = async () => {
+    const res = await api.get('/me');
+    setUser(res.data.data);
+    return res.data.data;
+  };
+
   const hasRole = (minLevel) => {
     return user?.role?.level >= minLevel;
   };
@@ -45,6 +63,8 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     logout,
+    updateUser,
+    refreshUser,
     loading,
     isAuthenticated: !!user,
     isAdmin: user?.role?.level >= 90,

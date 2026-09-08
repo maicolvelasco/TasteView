@@ -13,6 +13,8 @@ import {
   BarChart3,
   Users,
   Store,
+  Settings,
+  User,
   Menu,
   X,
   ChevronDown,
@@ -37,6 +39,8 @@ const ICON_MAP = {
   barChart: BarChart3,
   users: Users,
   store: Store,
+  settings: Settings,
+  userProfile: User,
 };
 
 export function NavIcon({ name, size = 17, strokeWidth = 2, ...rest }) {

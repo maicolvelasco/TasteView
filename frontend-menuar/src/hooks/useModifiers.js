@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const buildErrorMessage = (err, fallback) => {
   const msg = err.response?.data?.message;
@@ -9,8 +10,18 @@ const buildErrorMessage = (err, fallback) => {
 /**
  * Trae los grupos de opciones/modificadores (ej: "Tipo de bebida") y expone
  * las acciones de mutación que la página de Modificadores necesita.
+ *
+ * Antes, al crear un grupo nuevo, se mandaba siempre `branch_id: 1` fijo —
+ * el mismo bug que ya se corrigió en Menú/Categorías/Pedidos: cualquier
+ * admin de una sucursal distinta a la 1 terminaba creando sus grupos de
+ * opciones en la sucursal equivocada. Ahora usa la sucursal real de la
+ * sesión (el backend, además, ya rechaza explícitamente cualquier
+ * `branch_id` que no le pertenezca al usuario).
  */
 export default function useModifiers() {
+  const { user } = useAuth();
+  const branchId = user?.branch?.id ?? null;
+
   const [modifiers, setModifiers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -33,7 +44,7 @@ export default function useModifiers() {
   }, [fetchModifiers]);
 
   const createGroup = async (form) => {
-    await api.post('/modifiers', { branch_id: 1, ...form });
+    await api.post('/modifiers', { ...form, branch_id: branchId });
     fetchModifiers();
   };
 

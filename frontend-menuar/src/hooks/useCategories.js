@@ -1,13 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
-
-const BRANCH_CODE = 'SUC-001';
+import { getAdminMenu } from '../services/menu';
+import { useAuth } from '../context/AuthContext';
 
 /**
- * Trae las categorías de la sucursal (con conteo de productos) y expone las
- * acciones de mutación que la página de Categorías necesita.
+ * Trae las categorías de LA SUCURSAL DEL USUARIO LOGUEADO (con conteo de
+ * productos) y expone las acciones de mutación que la página de
+ * Categorías necesita.
+ *
+ * Antes esta pantalla tenía DOS bugs relacionados:
+ *  1) Traía las categorías llamando al endpoint público con un código de
+ *     sucursal fijo (`SUC-001` quemado en el código) — por eso una
+ *     categoría de "otra sucursal que no es la principal" tiraba
+ *     "Sucursal no encontrada": ese código simplemente no existía.
+ *  2) Al CREAR una categoría nueva, mandaba siempre `branch_id: 1` fijo,
+ *     sin importar en qué sucursal estuviera parado el admin — así que
+ *     aunque hubieras arreglado el bug de lectura, las categorías nuevas
+ *     se hubieran seguido creando en la sucursal 1 por error.
+ * Ambos se resuelven usando siempre la sucursal real de la sesión.
  */
 export default function useCategories() {
+  const { user } = useAuth();
+  const branchId = user?.branch?.id ?? null;
+
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -16,7 +31,7 @@ export default function useCategories() {
     setLoading(true);
     setError('');
     try {
-      const res = await api.get(`/menu/${BRANCH_CODE}`);
+      const res = await getAdminMenu();
       if (res.data.status) {
         // Traemos también el conteo de productos por categoría, para avisar antes de borrar.
         const cats = (res.data.data.categories || []).map((c) => ({
@@ -41,7 +56,7 @@ export default function useCategories() {
     if (editingCategory) {
       await api.put(`/categories/${editingCategory.id}`, form);
     } else {
-      await api.post('/categories', { ...form, branch_id: 1 });
+      await api.post('/categories', { ...form, branch_id: branchId });
     }
     fetchCategories();
   };

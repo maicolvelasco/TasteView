@@ -16,7 +16,7 @@
   overflow: hidden;
   padding: 26px 28px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(120deg, var(--color-primary), var(--color-primary-hover));
+  background: linear-gradient(120deg, var(--color-primary), var(--color-gradient-end));
   box-shadow: var(--shadow-md);
 }
 

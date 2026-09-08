@@ -6,14 +6,19 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\Concerns\ApiResponse;
 use App\Http\Controllers\Api\Concerns\AuthorizesCompanyAccess;
+use App\Http\Controllers\Api\Concerns\NormalizesNames;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Branch\IndexBranchRequest;
 use App\Http\Requests\Branch\StoreBranchRequest;
 use App\Http\Requests\Branch\UpdateBranchRequest;
 use App\Http\Resources\BranchResource;
 use App\Models\Branch;
+use App\Models\Category;
+use App\Models\Modifier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Administración de sucursales (Branches).
@@ -29,7 +34,7 @@ use Illuminate\Http\Request;
  */
 class BranchController extends Controller
 {
-    use ApiResponse, AuthorizesCompanyAccess;
+    use ApiResponse, AuthorizesCompanyAccess, NormalizesNames;
 
     /**
      * Relaciones a contar para dar contexto útil en el listado/detalle
@@ -102,6 +107,12 @@ class BranchController extends Controller
      * POST /api/branches
      * Crea una sucursal nueva dentro de la empresa del usuario (o, si
      * quien la crea es Super Admin, dentro de la empresa que indique).
+     *
+     * Como toda sucursal nace vacía, automáticamente se le copian las
+     * categorías y modificadores que YA existen en las demás sucursales
+     * de la misma empresa (sin duplicados por nombre) — ver
+     * seedCategoriesAndModifiersFromSiblings(). Así el admin no tiene
+     * que rearmar desde cero algo que ya configuró en otro local.
      */
     public function store(StoreBranchRequest $request): JsonResponse
     {
@@ -125,7 +136,97 @@ class BranchController extends Controller
 
         $branch = Branch::create([...$data, 'company_id' => $companyId]);
 
-        return $this->ok(new BranchResource($branch->load('company')), 201);
+        $seeded = $this->seedCategoriesAndModifiersFromSiblings($branch);
+
+        return $this->ok([
+            'branch' => new BranchResource($branch->load('company')),
+            'seeded' => $seeded,
+        ], 201);
+    }
+
+    /**
+     * Copia hacia una sucursal recién creada las categorías y
+     * modificadores (con sus opciones) que ya existen en las DEMÁS
+     * sucursales de la MISMA EMPRESA, sin traer productos — eso lo
+     * resuelve, a propósito, el botón "Duplicar de otra sucursal" del
+     * panel de Menú, donde el admin elige puntualmente cuáles quiere y
+     * con qué imagen/precio/AR. Acá solo se trae la ESTRUCTURA
+     * reutilizable, automáticamente, al momento de crear la sucursal.
+     *
+     * Deduplica por nombre (sin importar mayúsculas/espacios, igual que
+     * al duplicar platos): si tres sucursales ya tienen "Bebidas", la
+     * nueva sucursal recibe UNA sola "Bebidas", no tres. Si es la
+     * primera sucursal de la empresa, no hay nada que copiar.
+     *
+     * @return array{categories: int, modifiers: int} cuántas se copiaron, para informar al admin.
+     */
+    private function seedCategoriesAndModifiersFromSiblings(Branch $branch): array
+    {
+        $siblingBranchIds = Branch::where('company_id', $branch->company_id)
+            ->where('id', '!=', $branch->id)
+            ->pluck('id');
+
+        if ($siblingBranchIds->isEmpty()) {
+            return ['categories' => 0, 'modifiers' => 0];
+        }
+
+        $categoriesCreated = 0;
+        $modifiersCreated = 0;
+
+        DB::transaction(function () use ($siblingBranchIds, $branch, &$categoriesCreated, &$modifiersCreated) {
+            // ---- Categorías ----
+            $seenCategoryNames = [];
+
+            Category::whereIn('branch_id', $siblingBranchIds)
+                ->orderBy('branch_id')
+                ->orderBy('sort_order')
+                ->get()
+                ->each(function (Category $category) use ($branch, &$seenCategoryNames, &$categoriesCreated) {
+                    $key = $this->normalizeName($category->name);
+                    if (isset($seenCategoryNames[$key])) {
+                        return; // ya se copió una categoría con este nombre
+                    }
+                    $seenCategoryNames[$key] = true;
+
+                    $copy = $category->replicate(['slug']);
+                    $copy->branch_id = $branch->id;
+                    // La sucursal es nueva y todavía no tiene categorías,
+                    // así que el slug original no puede chocar con nada
+                    // (unique(['branch_id','slug']) es por sucursal).
+                    $copy->slug = Str::slug($category->name);
+                    $copy->save();
+                    $categoriesCreated++;
+                });
+
+            // ---- Modificadores (con sus opciones) ----
+            $seenModifierNames = [];
+
+            Modifier::whereIn('branch_id', $siblingBranchIds)
+                ->with('options')
+                ->orderBy('branch_id')
+                ->get()
+                ->each(function (Modifier $modifier) use ($branch, &$seenModifierNames, &$modifiersCreated) {
+                    $key = $this->normalizeName($modifier->name);
+                    if (isset($seenModifierNames[$key])) {
+                        return;
+                    }
+                    $seenModifierNames[$key] = true;
+
+                    $modifierCopy = $modifier->replicate();
+                    $modifierCopy->branch_id = $branch->id;
+                    $modifierCopy->save();
+
+                    foreach ($modifier->options as $option) {
+                        $optionCopy = $option->replicate();
+                        $optionCopy->modifier_id = $modifierCopy->id;
+                        $optionCopy->save();
+                    }
+
+                    $modifiersCreated++;
+                });
+        });
+
+        return ['categories' => $categoriesCreated, 'modifiers' => $modifiersCreated];
     }
 
     /**

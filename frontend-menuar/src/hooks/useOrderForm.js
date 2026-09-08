@@ -1,16 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import api from '../services/api';
+import { getAdminMenu } from '../services/menu';
+import { useAuth } from '../context/AuthContext';
 import { computeCartTotal, filterOrderProducts } from '../utils/orderForm';
-
-const BRANCH_CODE = 'SUC-001';
 
 /**
  * Encapsula todo el estado y las acciones de la toma de pedidos: catálogo
  * (categorías/productos/mesas/meseros), carrito, filtros (categoría +
  * búsqueda) y el envío del pedido. Usado tanto por Mesero como por Caja a
  * través de components/OrderForm.jsx, que solo se encarga de la UI.
+ *
+ * Antes esta pantalla tenía el mismo par de bugs que ya se corrigió en
+ * Menú/Categorías: traía el catálogo del endpoint público con un código
+ * de sucursal fijo (`SUC-001`), y al enviar el pedido mandaba siempre
+ * `branch_id: 1` — así que cualquier mesero/cajero de una sucursal
+ * distinta ni podía ver el menú correcto, ni el pedido quedaba
+ * registrado en su propia sucursal. Ahora todo usa la sucursal real del
+ * usuario logueado.
  */
 export default function useOrderForm({ showWaiterSelect = false, onOrderCreated } = {}) {
+  const { user } = useAuth();
+  const branchId = user?.branch?.id ?? null;
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [tables, setTables] = useState([]);
@@ -38,7 +49,7 @@ export default function useOrderForm({ showWaiterSelect = false, onOrderCreated 
 
   const fetchProducts = useCallback(async () => {
     try {
-      const res = await api.get(`/menu/${BRANCH_CODE}`);
+      const res = await getAdminMenu();
       if (res.data.status) {
         const cats = res.data.data.categories;
         setCategories(cats);
@@ -134,7 +145,7 @@ export default function useOrderForm({ showWaiterSelect = false, onOrderCreated 
       }));
 
       await api.post('/orders', {
-        branch_id: 1,
+        branch_id: branchId,
         table_id: selectedTable?.id || null,
         customer_name: customerName || undefined,
         order_type: orderType,
@@ -156,7 +167,7 @@ export default function useOrderForm({ showWaiterSelect = false, onOrderCreated 
     } finally {
       setLoading(false);
     }
-  }, [cart, selectedTable, customerName, orderType, notes, showWaiterSelect, selectedWaiterId, onOrderCreated]);
+  }, [cart, selectedTable, customerName, orderType, notes, showWaiterSelect, selectedWaiterId, onOrderCreated, branchId]);
 
   const filteredProducts = useMemo(
     () => filterOrderProducts(products, { categoryId: activeCategory, searchTerm }),

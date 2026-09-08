@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\Concerns\ApiResponse;
 use App\Http\Controllers\Api\Concerns\AuthorizesBranchAccess;
+use App\Http\Controllers\Api\Concerns\NormalizesNames;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -25,6 +26,7 @@ class MenuController extends Controller
 {
     use ApiResponse;
     use AuthorizesBranchAccess;
+    use NormalizesNames;
 
     // ==================== CATEGORÍAS ====================
 
@@ -364,11 +366,11 @@ class MenuController extends Controller
         // Categorías ya existentes en destino, para reutilizarlas por
         // nombre en vez de crear una categoría duplicada por cada plato.
         $targetCategories = Category::where('branch_id', $targetBranchId)->get();
-        $targetCategoryByName = $targetCategories->keyBy(fn ($c) => $this->normalizeDishName($c->name));
+        $targetCategoryByName = $targetCategories->keyBy(fn ($c) => $this->normalizeName($c->name));
 
         // Platos ya existentes en destino, para la detección de duplicados.
         $targetProductByName = Product::where('branch_id', $targetBranchId)->get()
-            ->keyBy(fn ($p) => $this->normalizeDishName($p->name));
+            ->keyBy(fn ($p) => $this->normalizeName($p->name));
 
         $created = [];
         $skipped = [];
@@ -380,7 +382,7 @@ class MenuController extends Controller
             &$created, &$skipped, &$idMap
         ) {
             foreach ($products as $product) {
-                $normalizedName = $this->normalizeDishName($product->name);
+                $normalizedName = $this->normalizeName($product->name);
                 $existing = $targetProductByName->get($normalizedName);
 
                 if ($existing && !in_array($product->id, $forceIds, true)) {
@@ -392,7 +394,7 @@ class MenuController extends Controller
                     continue;
                 }
 
-                $categoryName = $this->normalizeDishName($product->category->name ?? '');
+                $categoryName = $this->normalizeName($product->category->name ?? '');
                 $targetCategory = $targetCategoryByName->get($categoryName);
                 if (!$targetCategory && $product->category) {
                     $targetCategory = $product->category->replicate();
@@ -452,7 +454,7 @@ class MenuController extends Controller
                     $originalProduct = $originalId ? Product::find($originalId) : null;
                     $equivalent = $originalProduct
                         ? Product::where('branch_id', $copy->branch_id)
-                            ->whereRaw('LOWER(TRIM(name)) = ?', [$this->normalizeDishName($originalProduct->name)])
+                            ->whereRaw('LOWER(TRIM(name)) = ?', [$this->normalizeName($originalProduct->name)])
                             ->first()
                         : null;
 
@@ -479,16 +481,6 @@ class MenuController extends Controller
             'created_count' => count($created),
             'skipped' => $skipped,
         ], 201);
-    }
-
-    /**
-     * Normaliza un nombre de plato/categoría para comparar duplicados sin
-     * que importen mayúsculas/minúsculas ni espacios de más: "Pique",
-     * "PIQUE", "  piQue " y "pique" se consideran el mismo nombre.
-     */
-    private function normalizeDishName(string $name): string
-    {
-        return mb_strtolower(trim(preg_replace('/\s+/', ' ', $name)));
     }
 
     /**

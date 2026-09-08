@@ -97,7 +97,14 @@ const BranchesPage = () => {
       if (editingBranch) {
         await editBranch(editingBranch.id, formData);
       } else {
-        await addBranch(formData);
+        const result = await addBranch(formData);
+        const seeded = result?.seeded;
+        if (seeded && (seeded.categories > 0 || seeded.modifiers > 0)) {
+          alert(
+            `Sucursal creada. Se copiaron automáticamente ${seeded.categories} categoría(s) ` +
+            `y ${seeded.modifiers} modificador(es) de tus otras sucursales (sin duplicados).`
+          );
+        }
       }
       closeForm();
     } catch (err) {

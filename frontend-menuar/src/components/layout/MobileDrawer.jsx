@@ -4,6 +4,7 @@ import { X, LogOut } from '../../icons';
 import NavLink from './NavLink';
 import NavGroup from './NavGroup';
 import UserBadge from './UserBadge';
+import BrandLogo from './BrandLogo';
 import { isPathActive, isGroupActive } from '../../utils/navigation';
 
 // Cajón lateral deslizable (celular y tablet). Se monta/desmonta con
@@ -27,7 +28,7 @@ const MobileDrawer = ({ isOpen, onClose, navItems, pathname, onNavigate, user, o
           transition={{ type: 'spring', stiffness: 320, damping: 34 }}
         >
           <div className="dash-drawer-header">
-            <span className="dash-brand">🍽️ Restaurant AR</span>
+            <BrandLogo company={user?.company} size={22} />
             <motion.button
               type="button"
               whileTap={{ scale: 0.9 }}

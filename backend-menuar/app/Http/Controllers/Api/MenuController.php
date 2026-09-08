@@ -19,7 +19,7 @@ class MenuController extends Controller
      */
     public function index(string $branchCode): JsonResponse
     {
-        $branch = Branch::where('code', $branchCode)->where('is_active', true)->first();
+        $branch = Branch::with('company')->where('code', $branchCode)->where('is_active', true)->first();
 
         if (!$branch) {
             return response()->json(['status' => false, 'message' => 'Sucursal no encontrada'], 404);
@@ -69,6 +69,15 @@ class MenuController extends Controller
                     'code' => $branch->code,
                     'currency' => $branch->currency,
                     'tax_rate' => $branch->tax_rate,
+                    // Branding del negocio (nombre + logo) para el header del
+                    // menú público — ver Ajustes > Negocio en el panel. Si la
+                    // empresa todavía no configuró nada, el frontend usa su
+                    // propio fallback ("Restaurant AR" + ícono genérico).
+                    'company' => $branch->company ? [
+                        'name' => $branch->company->name,
+                        'logo_url' => $branch->company->logo_url,
+                        'theme' => $branch->company->theme,
+                    ] : null,
                 ],
                 'categories' => $result,
             ],

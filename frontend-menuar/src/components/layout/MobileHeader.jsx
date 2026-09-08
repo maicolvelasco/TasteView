@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MenuIcon } from '../../icons';
 import UserBadge from './UserBadge';
+import BrandLogo from './BrandLogo';
 
 // Barra angosta fija arriba, solo visible en celular/tablet (ver DashboardLayout.css).
 const MobileHeader = ({ user, onOpenDrawer }) => (
@@ -16,7 +17,7 @@ const MobileHeader = ({ user, onOpenDrawer }) => (
       <MenuIcon size={22} />
     </motion.button>
 
-    <span className="dash-brand">🍽️ Restaurant AR</span>
+    <BrandLogo company={user?.company} size={22} />
 
     <UserBadge user={user} size={34} compact />
   </header>

@@ -8,6 +8,16 @@
   --color-primary-disabled-text: #AFAFAF;
   --color-primary-soft: rgba(230, 126, 34, 0.10);   /* fondo suave para estados activos/hover, sin saturar */
   --color-primary-soft-border: rgba(230, 126, 34, 0.35);
+  /* "Punta" de los degradados de marca (headers, botones principales,
+     login). Por defecto es igual al hover (mismo look de siempre); el
+     tema de colores del negocio (Ajustes > Negocio) la sobreescribe en
+     caliente cuando el modo es "Bicolor" — ver utils/theme.js. */
+  --color-gradient-end: var(--color-primary-hover);
+
+  /* Tipografía del sistema. Por defecto Inter (mismo look de siempre);
+     el tema de colores del negocio (Ajustes > Negocio) la sobreescribe
+     en caliente si el admin elige otra fuente — ver utils/theme.js. */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Texto */
   --color-text: #333333;            /* Base Oscura — títulos, precios, texto principal */
@@ -49,7 +59,7 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-family);
   background: var(--color-bg-secondary);
   color: var(--color-text);
   min-height: 100vh;

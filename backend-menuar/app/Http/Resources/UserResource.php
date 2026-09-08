@@ -35,6 +35,15 @@ class UserResource extends JsonResource
                 'name' => $this->branch->name,
                 'tax_rate' => $this->branch->tax_rate,
             ] : null,
+            // Branding del negocio (nombre + logo) para que el panel de
+            // administración lo muestre en vez de "🍽️ Restaurant AR" por
+            // defecto — ver CompanyController y Ajustes > Negocio.
+            'company' => $this->branch?->company ? [
+                'id' => $this->branch->company->id,
+                'name' => $this->branch->company->name,
+                'logo_url' => $this->branch->company->logo_url,
+                'theme' => $this->branch->company->theme,
+            ] : null,
         ];
 
         // Datos de perfil extendido y permisos: solo en /me, no en el login.

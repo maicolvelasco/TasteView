@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\Admin\BranchController;
+use App\Http\Controllers\Api\Admin\CompanyController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Api\Admin\ModifierController;
@@ -34,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/me', [AuthController::class, 'updateProfile']);
+    Route::put('/me/password', [AuthController::class, 'changePassword']);
 
     // ==================== PEDIDOS (todos los empleados) ====================
     Route::get('/orders', [OrderController::class, 'index']);
@@ -120,6 +123,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/branches/{id}', [BranchController::class, 'update']);
         Route::delete('/branches/{id}', [BranchController::class, 'destroy']);
         Route::post('/branches/{id}/restore', [BranchController::class, 'restore']);
+
+        // Ajustes del negocio (nombre + logo) — pestaña "Negocio" en Ajustes
+        Route::get('/company', [CompanyController::class, 'show']);
+        Route::put('/company', [CompanyController::class, 'update']);
 
         // Usuarios
         Route::get('/users', [UserController::class, 'index']);

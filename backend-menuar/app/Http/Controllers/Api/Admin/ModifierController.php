@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\Concerns\ApiResponse;
+use App\Http\Controllers\Api\Concerns\AuthorizesBranchAccess;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Modifier\StoreModifierRequest;
 use App\Models\Modifier;
@@ -14,7 +17,7 @@ use Illuminate\Http\Request;
 
 class ModifierController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, AuthorizesBranchAccess;
 
     /**
      * Listar modificadores (grupos de opciones) de la sucursal
@@ -34,10 +37,21 @@ class ModifierController extends Controller
 
     /**
      * POST /api/modifiers
+     *
+     * Antes esta ruta confiaba ciegamente en el `branch_id` que mandara
+     * el cliente, sin verificar que perteneciera al usuario — cualquiera
+     * podía crear un modificador en una sucursal ajena con solo cambiar
+     * ese valor en la petición. Ahora se valida con el mismo trait que
+     * usa el resto del panel (`AuthorizesBranchAccess`): un Admin puede
+     * crear en cualquier sucursal, cualquier otro rol solo en la suya.
      */
     public function store(StoreModifierRequest $request): JsonResponse
     {
         $validated = $request->validated();
+
+        if ($response = $this->authorizeBranchAccess($request->user(), $validated['branch_id'])) {
+            return $response;
+        }
 
         $modifier = Modifier::create([
             'branch_id' => $validated['branch_id'],
@@ -66,6 +80,10 @@ class ModifierController extends Controller
     {
         $modifier = Modifier::findOrFail($id);
 
+        if ($response = $this->authorizeBranchAccess($request->user(), $modifier->branch_id)) {
+            return $response;
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:100',
             'description' => 'nullable|string',
@@ -82,9 +100,14 @@ class ModifierController extends Controller
      * Eliminar un grupo de modificador (y sus opciones/asignaciones en cascada)
      * DELETE /api/modifiers/{id}
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
         $modifier = Modifier::findOrFail($id);
+
+        if ($response = $this->authorizeBranchAccess($request->user(), $modifier->branch_id)) {
+            return $response;
+        }
+
         $productIds = ProductModifier::where('modifier_id', $id)->pluck('product_id');
 
         // Quitar la asignación a todos los productos que lo usaban
@@ -110,6 +133,10 @@ class ModifierController extends Controller
     {
         $modifier = Modifier::findOrFail($modifierId);
 
+        if ($response = $this->authorizeBranchAccess($request->user(), $modifier->branch_id)) {
+            return $response;
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'price_adjustment' => 'nullable|numeric',
@@ -130,7 +157,11 @@ class ModifierController extends Controller
      */
     public function updateOption(Request $request, int $id): JsonResponse
     {
-        $option = ModifierOption::findOrFail($id);
+        $option = ModifierOption::with('modifier')->findOrFail($id);
+
+        if ($response = $this->authorizeBranchAccess($request->user(), $option->modifier->branch_id)) {
+            return $response;
+        }
 
         $validated = $request->validate([
             'name' => 'sometimes|string|max:100',
@@ -147,9 +178,14 @@ class ModifierController extends Controller
      * Eliminar una opción puntual de un grupo (ej: quitar "Con leche de soya")
      * DELETE /api/modifier-options/{id}
      */
-    public function destroyOption(int $id): JsonResponse
+    public function destroyOption(Request $request, int $id): JsonResponse
     {
-        $option = ModifierOption::findOrFail($id);
+        $option = ModifierOption::with('modifier')->findOrFail($id);
+
+        if ($response = $this->authorizeBranchAccess($request->user(), $option->modifier->branch_id)) {
+            return $response;
+        }
+
         $option->delete();
 
         return $this->okMessage('Opción eliminada');

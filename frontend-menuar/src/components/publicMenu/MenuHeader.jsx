@@ -6,8 +6,12 @@ import { Armchair, UtensilsCrossed } from 'lucide-react';
  * Encabezado del Menú Digital Público. Usa la misma paleta corporativa
  * (var(--color-primary)) que el resto de la app, lista para el futuro
  * selector de colores del administrador.
+ *
+ * `logoUrl`/`businessName` vienen de Ajustes > Negocio (ver Company en el
+ * backend). Si el negocio todavía no configuró nada, se usa el ícono
+ * genérico y "Restaurant AR" por defecto — nunca queda un hueco vacío.
  */
-const MenuHeader = ({ branchName, tableNumber }) => (
+const MenuHeader = ({ businessName, logoUrl, tableNumber }) => (
   <motion.header
     className="public-menu-header"
     initial={{ opacity: 0, y: -10 }}
@@ -37,10 +41,14 @@ const MenuHeader = ({ branchName, tableNumber }) => (
         animate={{ scale: 1, rotate: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.1 }}
       >
-        <UtensilsCrossed size={26} strokeWidth={2} />
+        {logoUrl ? (
+          <img src={logoUrl} alt={businessName} className="public-menu-header-logo" />
+        ) : (
+          <UtensilsCrossed size={26} strokeWidth={2} />
+        )}
       </motion.span>
 
-      <h1 className="public-menu-header-title">{branchName || 'Restaurant AR'}</h1>
+      <h1 className="public-menu-header-title">{businessName || 'Restaurant AR'}</h1>
       <p className="public-menu-header-subtitle">Menú Digital Interactivo</p>
 
       {tableNumber && (

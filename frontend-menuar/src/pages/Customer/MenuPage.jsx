@@ -8,6 +8,8 @@ import MenuCategoryNav from '../../components/publicMenu/MenuCategoryNav';
 import MenuProductCard from '../../components/publicMenu/MenuProductCard';
 import MenuProductModal from '../../components/publicMenu/MenuProductModal';
 import usePublicMenu from '../../hooks/usePublicMenu';
+import useFavicon from '../../hooks/useFavicon';
+import useAppliedTheme from '../../hooks/useAppliedTheme';
 import '../../components/css/AdminCatalog.css';
 import '../../components/css/SharedUI.css';
 import './MenuPage.css';
@@ -30,6 +32,20 @@ const MenuPage = () => {
     loading, error, refetch,
     selectedProduct, openProduct, closeProduct,
   } = usePublicMenu(branchCode);
+
+  // El nombre/logo del NEGOCIO (Ajustes > Negocio) tiene prioridad sobre
+  // el de la sucursal puntual — es la marca que el cliente reconoce,
+  // aunque la sucursal internamente se llame "Sucursal 2" o similar. Si
+  // la empresa todavía no configuró nada, se cae al nombre de la
+  // sucursal y, si tampoco hay, al genérico del proyecto.
+  const businessName = branch?.company?.name || branch?.name || 'Restaurant AR';
+  const logoUrl = branch?.company?.logo_url || null;
+
+  // Ícono de la pestaña del navegador = logo del negocio.
+  useFavicon(logoUrl);
+
+  // Colores del sistema = tema del negocio (Ajustes > Negocio > Colores).
+  useAppliedTheme(branch?.company?.theme);
 
   // ─── Estado de carga ─────────────────────────────────────────────────────
   if (loading) {
@@ -61,7 +77,7 @@ const MenuPage = () => {
   // ─── Vista principal ─────────────────────────────────────────────────────
   return (
     <div className="public-menu-page">
-      <MenuHeader branchName={branch?.name} tableNumber={tableNumber} />
+      <MenuHeader businessName={businessName} logoUrl={logoUrl} tableNumber={tableNumber} />
 
       {/* Barra fija: búsqueda + categorías */}
       <div className="public-menu-toolbar">
@@ -119,7 +135,7 @@ const MenuPage = () => {
 
       <footer className="public-menu-footer">
         <UtensilsCrossed size={14} strokeWidth={2} />
-        {branch?.name || 'Restaurant AR'} · Menú Digital
+        {businessName} · Menú Digital
       </footer>
 
       {selectedProduct && (

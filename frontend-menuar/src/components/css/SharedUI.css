@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-on-primary);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-gradient-end));
   box-shadow: var(--shadow-md);
 }
 

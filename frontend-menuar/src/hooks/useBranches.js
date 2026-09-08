@@ -72,8 +72,12 @@ export default function useBranches() {
   // ─── Mutaciones ─────────────────────────────────────────────────────────
 
   const addBranch = async (formData) => {
-    await createBranch(formData);
+    const res = await createBranch(formData);
     await fetchBranches();
+    // { branch, seeded: { categories, modifiers } } — ver BranchController::store().
+    // Se devuelve para que la pantalla pueda avisar qué se copió
+    // automáticamente de las otras sucursales de la empresa.
+    return res.data.data;
   };
 
   const editBranch = async (id, formData) => {

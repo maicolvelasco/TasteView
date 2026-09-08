@@ -1,14 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
-
-const BRANCH_ID = 1;
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Trae las reservas de la sucursal y expone las acciones de mutación que la
  * página de Reservas necesita (crear, cambiar estado). La disponibilidad de
  * mesas para el formulario vive aparte, en hooks/useAvailableTables.js.
+ *
+ * Antes, al crear una reserva, se mandaba siempre `branch_id: 1` fijo (una
+ * constante de módulo) — el mismo bug que ya se corrigió en el resto del
+ * panel. El backend YA rechazaba esto correctamente para cualquier no-admin
+ * de otra sucursal (403 "No tienes permiso..."), pero para un Admin lo
+ * dejaba pasar y la reserva terminaba silenciosamente en la sucursal 1.
+ * Ahora usa la sucursal real de la sesión.
  */
 export default function useReservations() {
+  const { user } = useAuth();
+  const branchId = user?.branch?.id ?? null;
+
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,7 +41,7 @@ export default function useReservations() {
   }, [fetchReservations]);
 
   const createReservation = async (form) => {
-    await api.post('/reservations', { ...form, branch_id: BRANCH_ID });
+    await api.post('/reservations', { ...form, branch_id: branchId });
     fetchReservations();
   };
 

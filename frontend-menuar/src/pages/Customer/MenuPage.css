@@ -23,7 +23,7 @@
   position: relative;
   overflow: hidden;
   padding: 34px 20px 28px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-gradient-end));
   text-align: center;
 }
 
@@ -52,6 +52,16 @@
   background: rgba(255, 255, 255, 0.16);
   color: var(--color-text-on-primary);
   margin-bottom: 10px;
+}
+
+/* Logo del negocio (Ajustes > Negocio): SIEMPRE se redimensiona para
+   encajar dentro del círculo de 52px, sin importar las proporciones
+   originales del archivo — nunca se deforma ni se recorta. */
+.public-menu-header-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .public-menu-header-title {
@@ -488,7 +498,7 @@
   padding: 13px;
   border: none;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-gradient-end));
   color: var(--color-text-on-primary);
   font-size: 14px;
   font-weight: 700;

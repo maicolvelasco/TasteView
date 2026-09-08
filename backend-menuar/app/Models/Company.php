@@ -13,11 +13,12 @@ class Company extends Model
 
     protected $fillable = [
         'name', 'slug', 'logo_url', 'phone', 'email',
-        'address', 'tax_id', 'is_active'
+        'address', 'tax_id', 'is_active', 'theme'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'theme' => 'array',
     ];
 
     public function branches(): HasMany
